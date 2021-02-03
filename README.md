@@ -33,7 +33,7 @@ PlatformIO (https://platformio.org/) is recommended but also the classic Arduino
 **WARNING: Don't insert the BTT device the same time in a SD slot because of back feeding the voltage or remove the LM1117 voltage regulator (see below)!**
 
 6. Upload it to the device
-7. When PlatformIO (esptool) is trying to connect to the BTT device press and hold the BOOT switch and hit the RESET switch a shot of time.
+7. When PlatformIO (esptool) is trying to connect to the BTT device press and hold the BOOT switch and hit the RST switch a shot of time.
 
 ```
 Uploading .pio/build/esp12e/firmware.bin
@@ -44,7 +44,7 @@ Connecting........_____..
 
 8. Wait until the flash process is done
 
-9. Reset the device again with the RESET switch.
+9. Reset the device again with the RST switch.
 
 # Technical Stuff
 
