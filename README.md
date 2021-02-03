@@ -68,7 +68,14 @@ GPIO14|SCK
 GPIO4|CS   
 GPIO5|CS Sense
 
-Here is a sample schematic which is similar to the BTT TF Cloud devices. The real BTT TF Cloud schematic is not fully documented and may different form the following schematic.
+## Schematic
+The real BTT TF Cloud schematic is fully documented and may different from the following schematics. At the official GitHub repo (https://github.com/bigtreetech/BTT-SD-TF-Cloud-V1.0) only a few information can be found.
+
+It looks like that the BTT TF Cloud is using a schematic like this one: https://3dtoday.ru/blogs/massaraksh7/sd-karta-s-wifi-na-esp8266-dlya-3d-printera-plug-and-play?fbclid=IwAR3Re1DvyVIkiezvatVK9iViC1FurmdtnGOtBKMQJc4QwWB763S28cFTv2s
+
+![Russion Schematic](https://3dtoday.ru/cache/870x/posts/main/bHCD0h6paVG60ASXC9OQibvKpowjxwTuIoDGJfiI.png)
+
+Here is another sample schematic which is similar to the BTT TF Cloud devices. 
 ![Example Schematic](pics/PrinterHookup2.jpg)
 
 The card should be formatted for Fat16 or Fat32
