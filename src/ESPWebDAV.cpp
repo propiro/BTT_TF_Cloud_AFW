@@ -14,17 +14,24 @@ const char *wdays[]  = {"Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"};
 
 
 // ------------------------
-bool ESPWebDAV::init(int chipSelectPin, SPISettings spiSettings, int serverPort) {
+bool ESPWebDAV::init(int serverPort) {
 // ------------------------
 	// start the wifi server
 	server = new WiFiServer(serverPort);
 	server->begin();
-	
-	// initialize the SD card
-	return sd.begin(chipSelectPin, spiSettings);
+
+	return true;
 }
 
-
+// ------------------------
+bool ESPWebDAV::initSD(int chipSelectPin, SPISettings spiSettings) {
+// ------------------------
+	// initialize the SD card
+	if(!isSDInit)
+		return sd.begin(chipSelectPin, spiSettings);
+	else
+		return true;
+}
 
 // ------------------------
 void ESPWebDAV::handleNotFound() {

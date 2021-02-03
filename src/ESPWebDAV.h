@@ -1,3 +1,6 @@
+#ifndef ESPWEBDAV_H
+#define ESPWEBDAV_H
+
 #include <ESP8266WiFi.h>
 #include <SdFat.h>
 
@@ -16,10 +19,12 @@
 enum ResourceType { RESOURCE_NONE, RESOURCE_FILE, RESOURCE_DIR };
 enum DepthType { DEPTH_NONE, DEPTH_CHILD, DEPTH_ALL };
 
+using namespace sdfat;
 
 class ESPWebDAV	{
 public:
-	bool init(int chipSelectPin, SPISettings spiSettings, int serverPort);
+	bool init(int serverPort);
+	bool initSD(int chipSelectPin, SPISettings spiSettings);
 	bool isClientWaiting();
 	void handleClient(String blank = "");
 	void rejectClient(String rejectMessage);
@@ -74,9 +79,9 @@ protected:
 	String 		_responseHeaders;
 	bool		_chunked;
 	int			_contentLength;
+
+	// SD stuff
+	bool isSDInit = false;
 };
 
-
-
-
-
+#endif // ESPWEBDAV_H
