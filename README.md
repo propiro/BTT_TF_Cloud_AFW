@@ -3,7 +3,7 @@ This is a custom firmware for the BTT TF Cloud V1.0 (https://github.com/bigtreet
 
 **Changes from the original BTT TF Cloud V1.0 firmware**
 
-* Fixed SSID and password
+* Hardcoded SSID and password (to make WiFi working also without accessible SD card)
 * SD card is used only when a connection via WebDAV is established
 
 **Top**
