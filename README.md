@@ -83,7 +83,12 @@ The card should be formatted for Fat16 or Fat32
 To access the drive from Windows, type ```\\esp_hostname_or_ip\DavWWWRoot``` at the Run prompt, or use Map Network Drive menu in Windows Explorer.
 
 
-## Developing
-When removing the LM1117 voltage regulator it is possible to connect to the ESP8266 to USB and let the device connected via SD. 
+## Development
+### Remove of LM1117
+To connect the ESP8266 to USB and let the device connected via SD it is necessary to remove the LM1117 voltage regulator.
 
-![Example Schematic](pics/BTT_TF_Cloud_Removed_LM1117.jpg)
+![BTT_TF_Cloud_Removed_LM1117](pics/BTT_TF_Cloud_Removed_LM1117.jpg)
+
+### Ideas
+* Integrate WiFiManager to get rid of the hard coded WiFi settings: https://github.com/tzapu/WiFiManager
+* Integrate FTP server: https://github.com/haxord7hasib/Nodemcu-esp8266-FTP-server-with-sd-card-
