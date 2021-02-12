@@ -1,15 +1,19 @@
 # Alternative BTT TF Cloud V1.0 Firmware (AFW)
-This is a custom firmware for the BTT TF Cloud V1.0 (https://github.com/bigtreetech/BTT-SD-TF-Cloud-V1.0) devices.
+This is a custom firmware for the BTT TF Cloud V1.0 devices.
+
+More information about these devices can be found at the official repro https://github.com/bigtreetech/BTT-SD-TF-Cloud-V1.0.
 
 DISCLAIMER: This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
 
-**Changes from the original BTT TF Cloud V1.0 firmware**
+## Features
 
-* Hardcoded SSID and password (to make WiFi working also without accessible SD card)
-* SD card is used only when a connection via WebDAV is established
-* FTP server (works with FileZilla)
-* Firmware update via Web interface (not working right now)
+* FTP server (tested with FileZilla)
+* WebDAV server
+* WiFi config mode via an access point
+* SD card is in use only when a connection (WebDAV or FTP) is established
+* Firmware update via web interface
 
+## BTT TF Cloud V1.0 Hardware
 **Top**
 
 ![Example Schematic](pics/BTT_TF_Cloud_Top.jpg)
@@ -19,6 +23,25 @@ DISCLAIMER: This program is distributed in the hope that it will be useful, but 
 ![Example Schematic](pics/BTT_TF_Cloud_Bottom.jpg)
 
 ## Usage
+
+### WiFi Config
+If no WiFi settings are stored the device opens a new access point with the SSID `BTT_TF_CLOUD_AFW`. 
+
+**How to set**
+
+* Connect via to the WiFi `BTT_TF_CLOUD_AFW`
+* Browse to `http://192.168.4.1`
+* Configure your requested WiFi
+* Save
+
+**How to reset you config**
+
+* Power on the device
+* Press the `BOOT` button up to 5 seconds until the LED is starting to blink
+* Release the button
+* When the LED is off the device reboots
+* Proceed like above
+
 ### WebDAV Server 
 This project is a WiFi WebDAV server using ESP8266 SoC. It maintains the filesystem on an SD card.
 
@@ -53,15 +76,13 @@ PlatformIO (https://platformio.org/) is required and it should install the depen
 
 2. Open the folder with this repository
 
-3. Adapt `WiFiSettings.h`to your WiFi settings
+3. Build it
 
-4. Build it
-
-5. Connect your PC to the device  
+4. Connect your PC to the device  
 **WARNING: Don't insert the BTT device the same time in a SD slot because of back feeding the voltage or remove the LM1117 voltage regulator (see below)!**
 
-6. Upload it to the device
-7. When PlatformIO (esptool) is trying to connect to the BTT device press and hold the BOOT switch and hit the RST switch a shot of time.
+5. Upload it to the device
+6. When PlatformIO (esptool) is trying to connect to the BTT device press and hold the BOOT switch and hit the RST switch a shot of time.
 
 ```
 Uploading .pio/build/esp12e/firmware.bin
@@ -108,10 +129,9 @@ To connect the ESP8266 to USB and let the device connected via SD it is necessar
 
 ![BTT_TF_Cloud_Removed_LM1117](pics/BTT_TF_Cloud_Removed_LM1117.jpg)
 
-#### Ideas
-* Integrate WiFiManager to get rid of the hard coded WiFi settings: https://github.com/tzapu/WiFiManager
 
 ## Thanks
 * ardyesp for ESPWebDAV https://github.com/ardyesp/ESPWebDAV
 * Jean-Michel Gallego, David Paiva and others for ESP8266FTPServer https://github.com/nailbuster/esp8266FTPServer 
 * Scott Baker for ESP-WebOTA: https://github.com/scottchiefbaker/ESP-WebOTA
+* tzapu for https://github.com/tzapu/WiFiManager

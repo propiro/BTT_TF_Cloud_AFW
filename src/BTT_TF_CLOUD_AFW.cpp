@@ -18,26 +18,39 @@
  */
 
 #include <ESP8266WiFi.h>
+#include <WiFiManager.h>
 #include "Version.h"
 #include "ESPWebDAV.h"
 #include "ESPFtpServer.h"
 #include "WebOTA.h"
-#include "WiFiSettings.h"
 
 #define HOSTNAME "BTT_TF_CLOUD_AFW"
-#define SERVER_PORT 80
+
+// SD card
 #define SD_CS 5
 
+// WebDAV server
+#define SERVER_PORT 80
 ESPWebDAV dav;
 String statusMessage;
 bool initFailed = false;
 
+// FTP server
 FtpServer ftpSrv;
 
-// ------------------------
+// BOOT button
+#define BOOT_BUTTON_PIN 0
+void handleBootButton(void);
+
+// Wifi
+WiFiManager wifiManager;
+
+// LED
+#define LED_PIN 2
+void handleLED(void);
+
 void setup()
 {
-	// ------------------------
 	Serial.begin(115200);
 	Serial.println("");
 	Serial.println("");
@@ -48,9 +61,39 @@ void setup()
 	Serial.println("**********************************************");
 
 	// Start WiFi
-	init_wifi(WIFI_SSID, WIFI_PASSWORD, HOSTNAME);
+	Serial.println("");
+	Serial.println("--------------------------------");
+	Serial.println("Connect to WiFi");
+	Serial.println("--------------------------------");
+	WiFi.mode(WIFI_STA); // explicitly set mode, esp defaults to STA+AP
+	/*wifiManager.setConfigPortalBlocking(false);
+	wifiManager.setConnectTimeout(60);
+	wifiManager.setConnectRetries(10);
+	wifiManager.setWiFiAutoReconnect(true);*/
+	bool res = wifiManager.autoConnect(HOSTNAME);
+
+	if(!res) {
+        Serial.println("Running config portal");
+        // ESP.restart();
+    } 
+    else {
+        //if you get here you have connected to the WiFi    
+        Serial.println("connected...yeey :)");
+    }
+
+	// Init OTA firmware updater
+	Serial.println("");
+	Serial.println("--------------------------------");
+	Serial.println("Start firmware update server");
+	Serial.println("--------------------------------");
+	webota.init_wifi(HOSTNAME);
+	webota.init(8080, "/webota");
 
 	// start the SD DAV server
+	Serial.println("");
+	Serial.println("--------------------------------");
+	Serial.println("Start WebDAV server");
+	Serial.println("--------------------------------");
 	if (!dav.init(SERVER_PORT))
 	{
 		statusMessage = "An error occured while initialization of WebDAV server";
@@ -61,14 +104,23 @@ void setup()
 	Serial.println("WebDAV server started");
 
 	// Start FTP server
+	Serial.println("");
+	Serial.println("--------------------------------");
+	Serial.println("Start FTP server");
+	Serial.println("--------------------------------");
 	ftpSrv.begin("anonymous", "", SD_CS, SPI_FULL_SPEED); //username, password for ftp.  set ports in ESP8266FtpServer.h  (default 21, 50009 for PASV)
 	Serial.println("FTP server started");
+
+	// Setup FLASH button and LED
+	pinMode(BOOT_BUTTON_PIN, INPUT_PULLUP);
+	pinMode(LED_PIN, OUTPUT);
+	digitalWrite(LED_PIN, HIGH);
+
+	Serial.println("");
 }
 
-// ------------------------
 void loop()
 {
-	// ------------------------
 	// WebDAV
 	if (dav.isClientWaiting())
 	{
@@ -87,4 +139,80 @@ void loop()
 
 	// Web OTA update
 	webota.handle();
+
+	// Handle WiFi Manager
+	// wifiManager.process();
+	// handleLED();
+	handleBootButton();
 }
+
+// The flash button is used to reset the WiFi settings
+void handleBootButton(void)
+{
+	if(digitalRead(BOOT_BUTTON_PIN) == 0)
+	{
+		delay(50); // Debounce
+
+		if(digitalRead(BOOT_BUTTON_PIN) == 0)
+		{
+			Serial.println("BOOT button pressed");
+
+			delay(5000); // Wait 5 seconds
+
+			if(digitalRead(BOOT_BUTTON_PIN) == 0)
+			{
+				Serial.println("BOOT button pressed for 5 seconds ");
+				
+				// Let the LED 5 seconds blinking
+				for(int i = 0; i< 25; i++)
+				{
+					digitalWrite(LED_PIN, LOW);
+					delay(200);
+					digitalWrite(LED_PIN, HIGH);
+					delay(200);
+				}
+
+				Serial.println("Reset WiFi settings");
+				wifiManager.resetSettings();
+
+				Serial.println("Restarting ...");
+				ESP.restart();
+			}
+		}
+	}
+}
+
+// The LED blinks of the WiFi needs to be configured
+// void handleLED(void)
+// {
+// 	static uint32_t millisLED = 0;
+// 	static bool isTimeout = true;
+// 	static bool toggle = false;
+
+// 	if(wifiManager.getConfigPortalActive())
+// 	{
+// 		if(isTimeout)
+// 		{
+// 			millisLED = millis() + 0.5 * 1000; // 1 seconds
+// 			isTimeout = false;
+// 		}
+// 	}
+// 	else
+// 	{
+// 		// Switch off LED
+// 		digitalWrite(LED_PIN, HIGH);
+// 	}
+
+// 	// Wait for timeout
+// 	if(!(int32_t)(millisLED - millis()) > 0)
+// 	{
+// 		if(!isTimeout)
+// 		{
+// 			isTimeout = true;
+
+// 			// Let the LED blink
+// 			toggle = !toggle;
+// 			digitalWrite(LED_PIN, toggle);
+// 		}
+// 	}
+// }

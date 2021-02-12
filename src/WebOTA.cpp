@@ -222,10 +222,8 @@ void WebOTA::delay(unsigned int ms) {
 void WebOTA::set_custom_html(char const * const html) {
 	this->custom_html = html;
 }
-///////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////
 
-int init_mdns(const char *host) {
+int WebOTA::init_mdns(const char *host) {
 	// Use mdns for host name resolution
 	if (!MDNS.begin(host)) {
 		Serial.println("Error setting up MDNS responder!");
@@ -240,27 +238,16 @@ int init_mdns(const char *host) {
 	return 1;
 }
 
-String ip2string(IPAddress ip) {
+String WebOTA::ip2string(IPAddress ip) {
 	String ret = String(ip[0]) + "." +  String(ip[1]) + "." + String(ip[2]) + "." + String(ip[3]);
 
 	return ret;
 }
 
-int init_wifi(const char *ssid, const char *password, const char *mdns_hostname) {
-	WiFi.mode(WIFI_STA);
-	WiFi.begin(ssid, password);
+int WebOTA::init_wifi(const char *mdns_hostname) {
 
 	Serial.println("");
-	Serial.print("Connecting to Wifi");
-
-	// Wait for connection
-	while (WiFi.status() != WL_CONNECTED) {
-		delay(500);
-		Serial.print(".");
-	}
-
-	Serial.println("");
-	Serial.printf("Connected to '%s'\r\n\r\n",ssid);
+	Serial.printf("Connected to '%s'\r\n\r\n",WiFi.SSID().c_str());
 
 	String ipaddr = ip2string(WiFi.localIP());
 	Serial.printf("IP address   : %s\r\n", ipaddr.c_str());

@@ -29,13 +29,16 @@ class WebOTA {
 
 		void set_custom_html(char const * const html);
 
+		int init_wifi(const char *mdns_hostname);
+
+
 	private:
 		bool init_has_run;
 		char const * custom_html = NULL;
 		String get_ota_html();
 		long max_sketch_size();
+		int init_mdns(const char *host);
+		String ip2string(IPAddress ip);
 };
-
-int init_wifi(const char *ssid, const char *password, const char *mdns_hostname);
 
 extern WebOTA webota;
