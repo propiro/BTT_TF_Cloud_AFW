@@ -18,80 +18,72 @@
  */
 
 #include <ESP8266WiFi.h>
+#include "Version.h"
 #include "ESPWebDAV.h"
 #include "ESPFtpServer.h"
 #include "WebOTA.h"
 #include "WiFiSettings.h"
 
-#define HOSTNAME	"BTT_TF_CLOUD_AFW"
-#define SERVER_PORT	80
-#define SD_CS		5
+#define HOSTNAME "BTT_TF_CLOUD_AFW"
+#define SERVER_PORT 80
+#define SD_CS 5
 
 ESPWebDAV dav;
 String statusMessage;
 bool initFailed = false;
 
-FtpServer ftpSrv;   //set #define FTP_DEBUG in ESP8266FtpServer.h to see ftp verbose on serial
-
+FtpServer ftpSrv;
 
 // ------------------------
-void setup() {
-// ------------------------
+void setup()
+{
+	// ------------------------
 	Serial.begin(115200);
 	Serial.println("");
-	Serial.println("Connecting to WiFi");
+	Serial.println("");
+	Serial.println("**********************************************");
+	Serial.print(AFW_FULL_NAME);
+	Serial.print(" Version ");
+	Serial.println(AFW_VERSION);
+	Serial.println("**********************************************");
 
-	// WiFi.mode(WIFI_STA);
-	// WiFi.setPhyMode(WIFI_PHY_MODE_11N);
-	// WiFi.hostname(HOSTNAME);
-	// delay(1000);
-
-	// WiFi.begin(WIFI_SSID, WIFI_PASSWORD);
-
-	// // Wait for connection
-	// while(WiFi.status() != WL_CONNECTED) {
-	// 	delay(500);
-	// 	Serial.print(".");
-	// }
-
-	// Serial.println("");
-	// Serial.print("Connected to "); Serial.println(WIFI_SSID);
-	// Serial.print ("IP address: "); Serial.println(WiFi.localIP());
-	// Serial.print ("RSSI: "); Serial.println(WiFi.RSSI());
-	// Serial.print ("Mode: "); Serial.println(WiFi.getPhyMode());
-
+	// Start WiFi
 	init_wifi(WIFI_SSID, WIFI_PASSWORD, HOSTNAME);
-	
+
 	// start the SD DAV server
-	if(!dav.init(SERVER_PORT))		{
-		statusMessage = "Failed to initialize SD Card";
-		Serial.print("ERROR: "); Serial.println(statusMessage);
+	if (!dav.init(SERVER_PORT))
+	{
+		statusMessage = "An error occured while initialization of WebDAV server";
+		Serial.print("ERROR: ");
+		Serial.println(statusMessage);
 		initFailed = true;
 	}
 	Serial.println("WebDAV server started");
 
 	// Start FTP server
-	ftpSrv.begin("anonymous","", SD_CS, SPI_FULL_SPEED);    //username, password for ftp.  set ports in ESP8266FtpServer.h  (default 21, 50009 for PASV)
+	ftpSrv.begin("anonymous", "", SD_CS, SPI_FULL_SPEED); //username, password for ftp.  set ports in ESP8266FtpServer.h  (default 21, 50009 for PASV)
 	Serial.println("FTP server started");
 }
 
 // ------------------------
-void loop() {
-// ------------------------
-	// WebDAY
-	if(dav.isClientWaiting())	{
+void loop()
+{
+	// ------------------------
+	// WebDAV
+	if (dav.isClientWaiting())
+	{
 		Serial.println("Client connected");
-		if(initFailed)
+		if (initFailed)
 			return dav.rejectClient(statusMessage);
 
 		// call handle if server was initialized properly
-		
+
 		dav.initSD(SD_CS, SPI_FULL_SPEED);
 		dav.handleClient();
 	}
 
 	// FTP
-	ftpSrv.handleFTP();        //make sure in loop you call handleFTP()!!  
+	ftpSrv.handleFTP(); //make sure in loop you call handleFTP()!!
 
 	// Web OTA update
 	webota.handle();
