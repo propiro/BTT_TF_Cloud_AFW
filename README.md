@@ -1,10 +1,11 @@
-# Custom BTT TF Cloud V1.0 Firmware
+# Alternative BTT TF Cloud V1.0 Firmware (AFW)
 This is a custom firmware for the BTT TF Cloud V1.0 (https://github.com/bigtreetech/BTT-SD-TF-Cloud-V1.0) devices.
 
 **Changes from the original BTT TF Cloud V1.0 firmware**
 
 * Hardcoded SSID and password (to make WiFi working also without accessible SD card)
 * SD card is used only when a connection via WebDAV is established
+* FTP server
 
 **Top**
 
@@ -91,4 +92,3 @@ To connect the ESP8266 to USB and let the device connected via SD it is necessar
 
 ### Ideas
 * Integrate WiFiManager to get rid of the hard coded WiFi settings: https://github.com/tzapu/WiFiManager
-* Integrate FTP server: https://github.com/haxord7hasib/Nodemcu-esp8266-FTP-server-with-sd-card-
