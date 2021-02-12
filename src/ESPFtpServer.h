@@ -32,10 +32,11 @@
 
 #include <SdFat.h>
 #include <WiFiClient.h>
+#include "Version.h"
 
 #define FTP_DEBUG 1
 
-#define FTP_SERVER_VERSION "FTP-2021-02-12"
+#define FTP_SERVER_VERSION AFW_VERSION
 
 #define FTP_CTRL_PORT    21          // Command port on wich server is listening  
 #define FTP_DATA_PORT_PASV 50009     // Data port in passive mode
