@@ -69,8 +69,13 @@ void FtpServer::handleFTP()
     return;
 
   if (ftpServer.hasClient()) {
-	  client.stop();
+    #ifdef FTP_DEBUG
+	  Serial.println("Stop previous connection");
+    #endif
+	  //client.stop();
+    disconnectClient();
 	  client = ftpServer.available();
+    cmdStatus = 1;
   }
   
   if( cmdStatus == 0 )
@@ -96,18 +101,13 @@ void FtpServer::handleFTP()
       clientConnected();      
       millisEndConnection = millis() + 10 * 1000 ; // wait client id during 10 s.
       cmdStatus = 3;
-
-      initSD();
     }
   }
   else if( readChar() > 0 )         // got response
   {
     if( cmdStatus == 3 )            // Ftp server waiting for user identity
       if( userIdentity() )
-        if(strcmp( _FTP_USER.c_str(), "anonymous"))
           cmdStatus = 4;
-        else
-          cmdStatus = 5;
       else
         cmdStatus = 0;
     else if( cmdStatus == 4 )       // Ftp server waiting for user registration
@@ -115,6 +115,8 @@ void FtpServer::handleFTP()
       {
         cmdStatus = 5;
         millisEndConnection = millis() + millisTimeOut;
+
+        initSD();
       }
       else
         cmdStatus = 0;
@@ -181,10 +183,7 @@ boolean FtpServer::userIdentity()
     client.println( "530 user not found");
   else
   {
-    if(strcmp( _FTP_USER.c_str(), "anonymous"))
-      client.println( "331 OK. Password required");
-    else
-      client.println( "230 OK.");
+    client.println( "331 OK. Password required");
 
     strcpy( cwdName, "/" );
     return true;
@@ -197,7 +196,7 @@ boolean FtpServer::userPassword()
 {
   if( strcmp( command, "PASS" ))
     client.println( "500 Syntax error");
-  else if( strcmp( parameters, _FTP_PASS.c_str() ))
+  else if( strcmp( parameters, _FTP_PASS.c_str() ) && strcmp( _FTP_USER.c_str(), "anonymous"))
     client.println( "530 ");
   else
   {

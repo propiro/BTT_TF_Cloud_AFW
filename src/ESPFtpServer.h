@@ -1,4 +1,3 @@
-
 /*
 *  FTP SERVER FOR ESP8266
  * based on FTP Serveur for Arduino Due and Ethernet shield (W5100) or WIZ820io (W5200)
