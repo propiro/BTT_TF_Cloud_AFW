@@ -28,9 +28,14 @@ bool ESPWebDAV::initSD(int chipSelectPin, SPISettings spiSettings) {
 // ------------------------
 	// initialize the SD card
 	if(!isSDInit)
+	{
+		isSDInit = true;
 		return sd.begin(chipSelectPin, spiSettings);
+	}
 	else
+	{
 		return true;
+	}
 }
 
 // ------------------------
