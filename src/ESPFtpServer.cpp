@@ -72,7 +72,6 @@ void FtpServer::handleFTP()
     #ifdef FTP_DEBUG
 	  Serial.println("Stop previous connection");
     #endif
-	  //client.stop();
     disconnectClient();
 	  client = ftpServer.available();
     cmdStatus = 1;
@@ -408,68 +407,70 @@ boolean FtpServer::processCommand()
   //
   else if( ! strcmp( command, "LIST" ))
   {
-    if( ! dataConnect())
-      client.println( "425 No data connection");
-    else
-    {
-      client.println( "150 Accepted data connection");
-      uint16_t nm = 0;
-      SdFile dir;
-      dir.open(SD.vwd(), cwdName, O_READ);
-      dir.rewind();
-      
-      data.println( "Type=cdir;Perm=cmpel; " + String(cwdName));
-      data.println( "Type=pdir;Perm=el; ");
-      nm = 2;
+    client.println( "502 Command not implemented");
 
-      SdFile entry;
-      while(entry.openNext(&dir, O_READ))
-      {
-        entry.getName(buf, sizeof(buf));
-        #ifdef FTP_DEBUG
-        Serial.print("Folder content "); Serial.println(buf);
-        #endif
+    // if( ! dataConnect())
+    //   client.println( "425 No data connection");
+    // else
+    // {
+    //   client.println( "150 Accepted data connection");
+    //   uint16_t nm = 0;
+    //   SdFile dir;
+    //   dir.open(SD.vwd(), cwdName, O_READ);
+    //   dir.rewind();
 
-        // File name
-        char buf[255];
-        entry.getName(buf, sizeof(buf));
-        String fn = String(buf);
+    //   data.println( "Type=cdir;Perm=cmpel; " + String(cwdName));
+    //   data.println( "Type=pdir;Perm=el; ");
+    //   nm = 2;
 
-        // File size
-        String fs = String(entry.fileSize());
+    //   SdFile entry;
+    //   while(entry.openNext(&dir, O_READ))
+    //   {
+    //     entry.getName(buf, sizeof(buf));
+    //     #ifdef FTP_DEBUG
+    //     Serial.print("Folder content "); Serial.println(buf);
+    //     #endif
 
-        // File date
-        dir_t dir;
-        entry.dirEntry(&dir);
+    //     // File name
+    //     char buf[255];
+    //     entry.getName(buf, sizeof(buf));
+    //     String fn = String(buf);
 
-        tm tmStr;
-        tmStr.tm_hour = FAT_HOUR(dir.lastWriteTime);
-        tmStr.tm_min = FAT_MINUTE(dir.lastWriteTime);
-        tmStr.tm_sec = FAT_SECOND(dir.lastWriteTime);
-        tmStr.tm_year = FAT_YEAR(dir.lastWriteDate) - 1900;
-        tmStr.tm_mon = FAT_MONTH(dir.lastWriteDate) - 1;
-        tmStr.tm_mday = FAT_DAY(dir.lastWriteDate);
-        time_t t2t = mktime(&tmStr);
-        tm *gTm = gmtime(&t2t);
-        sprintf(buf, "%04d%02d%02d%02d%02d%02d", gTm->tm_year + 1900, gTm->tm_mon, gTm->tm_mday, gTm->tm_hour, gTm->tm_min, gTm->tm_sec);
-        String fileTimeStamp = String(buf);
+    //     // File size
+    //     String fs = String(entry.fileSize());
 
-        if(entry.isDir())
-          data.println( "Type=dir;modify=" + fileTimeStamp + ";Perm=cpmel; " + fn);
-        else
-          data.println( "Type=file;Size=" + fs + ";"+"modify=" + fileTimeStamp + ";" + " " + fn);
-        nm ++;
-        entry.close();
-      }
+    //     // File date
+    //     dir_t dir;
+    //     entry.dirEntry(&dir);
 
-      client.println( "226 LIST completed");
-      /*client.println( "226-options: -a -l");
-      client.println( "226 " + String(nm) + " matches total");*/
+    //     tm tmStr;
+    //     tmStr.tm_hour = FAT_HOUR(dir.lastWriteTime);
+    //     tmStr.tm_min = FAT_MINUTE(dir.lastWriteTime);
+    //     tmStr.tm_sec = FAT_SECOND(dir.lastWriteTime);
+    //     tmStr.tm_year = FAT_YEAR(dir.lastWriteDate) - 1900;
+    //     tmStr.tm_mon = FAT_MONTH(dir.lastWriteDate) - 1;
+    //     tmStr.tm_mday = FAT_DAY(dir.lastWriteDate);
+    //     time_t t2t = mktime(&tmStr);
+    //     tm *gTm = gmtime(&t2t);
+    //     sprintf(buf, "%04d%02d%02d%02d%02d%02d", gTm->tm_year + 1900, gTm->tm_mon, gTm->tm_mday, gTm->tm_hour, gTm->tm_min, gTm->tm_sec);
+    //     String fileTimeStamp = String(buf);
 
-      dir.close();
-    }
+    //     if(entry.isDir())
+    //       data.println( "Type=dir;modify=" + fileTimeStamp + ";Perm=cpmel; " + fn);
+    //     else
+    //       data.println( "Type=file;Size=" + fs + ";"+"modify=" + fileTimeStamp + ";" + " " + fn);
+    //     nm ++;
+    //     entry.close();
+    //   }
 
-    data.stop();  
+    //   client.println( "226 LIST completed");
+    //   /*client.println( "226-options: -a -l");
+    //   client.println( "226 " + String(nm) + " matches total");*/
+
+    //   dir.close();
+    // }
+
+    // data.stop();  
   }
   //
   //  MLSD - Listing for Machine Processing (see RFC 3659)
