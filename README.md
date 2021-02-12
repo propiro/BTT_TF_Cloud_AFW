@@ -58,7 +58,7 @@ Supports the basic WebDav operations - *PROPFIND*, *GET*, *PUT*, *DELETE*, *MKCO
 Once the WebDAV server is running on the ESP8266, a WebDAV client like Windows can access the filesystem on the SD card just like a cloud drive. The drive can also be mounted like a networked drive, and allows copying/pasting/deleting files on SD card remotely.
 
 ## FTP Server
-The FTP server is tested with (FileZilla)[https://filezilla-project.org/]. If you would like to use another FTP client read the limiations, please.
+The FTP server is tested with [FileZilla](https://filezilla-project.org/). If you would like to use another FTP client read the limiations, please.
 
 **Limitations**
 * The LIST command is not supported so the most FTP clients will not work
