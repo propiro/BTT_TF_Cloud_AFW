@@ -1,8 +1,7 @@
 // Arduino build process info: https://github.com/arduino/Arduino/wiki/Build-Process
 
-#define WEBOTA_VERSION "0.1.5"
-
 #include "WebOTA.h"
+#include "Version.h"
 #include <Arduino.h>
 #include <WiFiClient.h>
 
@@ -78,7 +77,7 @@ long WebOTA::max_sketch_size() {
 }
 
 // R Macro string literal https://en.cppreference.com/w/cpp/language/string_literal
-const char ota_version_html[] PROGMEM = "<h1>WebOTA Version: " WEBOTA_VERSION "</h1>";
+const char ota_version_html[] PROGMEM = "<h1>" AFW_FULL_NAME " Version " AFW_VERSION " Firmware Update</h1>";
 
 const char ota_upload_form[] PROGMEM = R"!^!(
 
@@ -155,10 +154,10 @@ int WebOTA::add_http_routes(WebServer *server, const char *path) {
 		if (this->custom_html != NULL) {
 			html += this->custom_html;
 		} else {
-			html += ota_version_html;
+			html += FPSTR(ota_version_html);
 		}
 
-		html += ota_upload_form;
+		html += FPSTR(ota_upload_form);
 		server->send_P(200, "text/html", html.c_str());
 	});
 
