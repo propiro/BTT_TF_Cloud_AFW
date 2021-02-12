@@ -4,6 +4,8 @@
  * based on Jean-Michel Gallego's work
  * based on David Paiva david@nailbuster.com
  * modified to work with BTT TF Cloud devices by Albrecht Lohofener albrechtloh@gmx.de
+ *  - Added support for SDFAT
+ *  - Added folder support
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -654,14 +656,48 @@ boolean FtpServer::processCommand()
   //
   else if (!strcmp(command, "MKD"))
   {
-    client.println("550 Can't create \"" + String(parameters)); //not support on espyet
+    char path[FTP_CWD_SIZE];
+
+    if (parameters[0] == '/') // Estimate full path
+    {
+      strcpy(path, parameters);
+    }
+    else
+    {
+      strcpy(path, cwdName);
+      strcat(path, "/");
+      strcat(path, parameters);
+    }
+
+    // create directory
+    if (!SD.mkdir(path, true))
+      client.println("550 Can't create \"" + String(parameters));
+    else
+      client.println("200 Directory " + String(parameters) + " created");
   }
   //
   //  RMD - Remove a Directory
   //
   else if (!strcmp(command, "RMD"))
   {
-    client.println("501 Can't delete \"" + String(parameters));
+    char path[FTP_CWD_SIZE];
+
+    if (parameters[0] == '/') // Estimate full path
+    {
+      strcpy(path, parameters);
+    }
+    else
+    {
+      strcpy(path, cwdName);
+      strcat(path, "/");
+      strcat(path, parameters);
+    }
+
+    // delete a directory
+    if (!SD.rmdir(path))
+      client.println("501 Can't delete \"" + String(parameters));
+    else
+      client.println("200 Directory " + String(parameters) + " deleted");
   }
   //
   //  RNFR - Rename From
@@ -681,7 +717,7 @@ boolean FtpServer::processCommand()
 #ifdef FTP_DEBUG
         Serial.println("Renaming " + String(buf));
 #endif
-        client.println("350 RNFR accepted - file exists, ready for destination");
+        client.println("350 RNFR accepted - file or folder exists, ready for destination");
         rnfrCmd = true;
       }
     }
@@ -699,7 +735,6 @@ boolean FtpServer::processCommand()
       client.println("501 No file name");
     else if (makePath(path))
     {
-      //if( SPIFFS.exists( path ))
       if (SD.exists(path))
         client.println("553 " + String(parameters) + " already exists");
       else
@@ -707,12 +742,11 @@ boolean FtpServer::processCommand()
 #ifdef FTP_DEBUG
         Serial.println("Renaming " + String(buf) + " to " + String(path));
 #endif
-        //try.. if( SPIFFS.rename( buf, path ))
-        /*try..      if( SD.rename( buf, path ))
-              client.println( "250 File successfully renamed or moved");
-            else
-				client.println( "451 Rename/move failure");*/
-        client.println("451 Rename/move failure");
+
+      if (!SD.rename(buf, path))
+        client.println("451 Rename/move from " + String(buf) + " to " + String(path) + " failure"); 
+      else
+        client.println("200 Rename/move of file or directory from " + String(buf) + " to " + String(path) + " successfully"); 
       }
     }
     rnfrCmd = false;

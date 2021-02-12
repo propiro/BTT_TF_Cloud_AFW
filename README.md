@@ -5,7 +5,7 @@ This is a custom firmware for the BTT TF Cloud V1.0 (https://github.com/bigtreet
 
 * Hardcoded SSID and password (to make WiFi working also without accessible SD card)
 * SD card is used only when a connection via WebDAV is established
-* FTP server
+* FTP server (works with FileZilla)
 
 **Top**
 
@@ -55,6 +55,15 @@ This project is a WiFi WebDAV server using ESP8266 SoC. It maintains the filesys
 Supports the basic WebDav operations - *PROPFIND*, *GET*, *PUT*, *DELETE*, *MKCOL*, *MOVE* etc.
 
 Once the WebDAV server is running on the ESP8266, a WebDAV client like Windows can access the filesystem on the SD card just like a cloud drive. The drive can also be mounted like a networked drive, and allows copying/pasting/deleting files on SD card remotely.
+
+## FTP Server
+The FTP server is tested with (FileZilla)[https://filezilla-project.org/]. If you would like to use another FTP client read the limiations, please.
+
+**Limitations**
+* The LIST command is not supported so the most FTP clients will not work
+* Only supports passive FTP mode
+* No encryption
+* Accepts only 1 connection at the same time
 
 
 ## Pinout
