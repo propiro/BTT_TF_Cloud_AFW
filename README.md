@@ -1,6 +1,8 @@
 # Alternative BTT TF Cloud V1.0 Firmware (AFW)
 This is a custom firmware for the BTT TF Cloud V1.0 (https://github.com/bigtreetech/BTT-SD-TF-Cloud-V1.0) devices.
 
+DISCLAIMER: This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+
 **Changes from the original BTT TF Cloud V1.0 firmware**
 
 * Hardcoded SSID and password (to make WiFi working also without accessible SD card)
@@ -16,13 +18,37 @@ This is a custom firmware for the BTT TF Cloud V1.0 (https://github.com/bigtreet
 
 ![Example Schematic](pics/BTT_TF_Cloud_Bottom.jpg)
 
-This repository is based on the work of ardyesp (https://github.com/ardyesp/ESPWebDAV). Thanks! 
+## Usage
+### WebDAV Server 
+This project is a WiFi WebDAV server using ESP8266 SoC. It maintains the filesystem on an SD card.
 
+Supports the basic WebDav operations - *PROPFIND*, *GET*, *PUT*, *DELETE*, *MKCOL*, *MOVE* etc.
 
-# Building
-PlatformIO (https://platformio.org/) is recommended but also the classic Arduino IDE should work. You need to install the [Arduino esp8266 libraries](https://github.com/esp8266/Arduino). PlatformIO should install it automatically.
+Once the WebDAV server is running on the ESP8266, a WebDAV client like Windows can access the filesystem on the SD card just like a cloud drive. The drive can also be mounted like a networked drive, and allows copying/pasting/deleting files on SD card remotely.
 
-## How to
+### FTP Server
+The FTP server is tested with [FileZilla](https://filezilla-project.org/). If you would like to use another FTP client read the limiations, please.
+
+**Limitations**
+
+* The LIST command is not supported so the most FTP clients will not work
+* Only supports passive FTP mode
+* No encryption
+* Accepts only 1 connection at the same time
+
+### Firmware Update
+#### Over-the-Air (OTA)
+This firmware has an included webserver to update the firmware. It can be used with the following link `http://<your IP>:8080/webota` e.g. `http://192.168.1.1:8080/webota`
+
+Select the corresponding `*.bin` file and click update.
+
+#### USB
+TBD
+
+## Building
+PlatformIO (https://platformio.org/) is required and it should install the dependencies automatically.
+
+### How to
 1. Open PlatformIO
 
 2. Open the folder with this repository
@@ -48,26 +74,8 @@ Connecting........_____..
 
 9. Reset the device again with the RST switch.
 
-# Technical Stuff
-
-## WebDAV Server 
-This project is a WiFi WebDAV server using ESP8266 SoC. It maintains the filesystem on an SD card.
-
-Supports the basic WebDav operations - *PROPFIND*, *GET*, *PUT*, *DELETE*, *MKCOL*, *MOVE* etc.
-
-Once the WebDAV server is running on the ESP8266, a WebDAV client like Windows can access the filesystem on the SD card just like a cloud drive. The drive can also be mounted like a networked drive, and allows copying/pasting/deleting files on SD card remotely.
-
-## FTP Server
-The FTP server is tested with [FileZilla](https://filezilla-project.org/). If you would like to use another FTP client read the limiations, please.
-
-**Limitations**
-* The LIST command is not supported so the most FTP clients will not work
-* Only supports passive FTP mode
-* No encryption
-* Accepts only 1 connection at the same time
-
-
-## Pinout
+## Technical Stuff
+### Pinout
 
 BTT TF Cloud hardware uses the following SD card connections:
 
@@ -79,7 +87,7 @@ GPIO14|SCK
 GPIO4|CS   
 GPIO5|CS Sense
 
-## Schematic
+### Schematic
 The real BTT TF Cloud schematic is fully documented and may different from the following schematics. At the official GitHub repo (https://github.com/bigtreetech/BTT-SD-TF-Cloud-V1.0) only a few information can be found.
 
 It looks like that the BTT TF Cloud is using a schematic like this one: https://3dtoday.ru/blogs/massaraksh7/sd-karta-s-wifi-na-esp8266-dlya-3d-printera-plug-and-play?fbclid=IwAR3Re1DvyVIkiezvatVK9iViC1FurmdtnGOtBKMQJc4QwWB763S28cFTv2s
@@ -94,16 +102,16 @@ The card should be formatted for Fat16 or Fat32
 To access the drive from Windows, type ```\\esp_hostname_or_ip\DavWWWRoot``` at the Run prompt, or use Map Network Drive menu in Windows Explorer.
 
 
-## Development
-### Remove of LM1117
+### Development
+#### Remove of LM1117
 To connect the ESP8266 to USB and let the device connected via SD it is necessary to remove the LM1117 voltage regulator.
 
 ![BTT_TF_Cloud_Removed_LM1117](pics/BTT_TF_Cloud_Removed_LM1117.jpg)
 
-### Ideas
+#### Ideas
 * Integrate WiFiManager to get rid of the hard coded WiFi settings: https://github.com/tzapu/WiFiManager
 
-# Thanks
+## Thanks
 * ardyesp for ESPWebDAV https://github.com/ardyesp/ESPWebDAV
 * Jean-Michel Gallego, David Paiva and others for ESP8266FTPServer https://github.com/nailbuster/esp8266FTPServer 
 * Scott Baker for ESP-WebOTA: https://github.com/scottchiefbaker/ESP-WebOTA
