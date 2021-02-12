@@ -6,6 +6,7 @@ This is a custom firmware for the BTT TF Cloud V1.0 (https://github.com/bigtreet
 * Hardcoded SSID and password (to make WiFi working also without accessible SD card)
 * SD card is used only when a connection via WebDAV is established
 * FTP server (works with FileZilla)
+* Firmware update via Web interface (not working right now)
 
 **Top**
 
@@ -101,3 +102,8 @@ To connect the ESP8266 to USB and let the device connected via SD it is necessar
 
 ### Ideas
 * Integrate WiFiManager to get rid of the hard coded WiFi settings: https://github.com/tzapu/WiFiManager
+
+# Thanks
+* ardyesp for ESPWebDAV https://github.com/ardyesp/ESPWebDAV
+* Jean-Michel Gallego, David Paiva and others for ESP8266FTPServer https://github.com/nailbuster/esp8266FTPServer 
+* Scott Baker for ESP-WebOTA: https://github.com/scottchiefbaker/ESP-WebOTA

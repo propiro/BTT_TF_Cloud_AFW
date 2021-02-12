@@ -8,6 +8,8 @@
 #include <time.h>
 #include "ESPWebDAV.h"
 
+using namespace sdfat;
+
 // define cal constants
 const char *months[]  = {"Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"};
 const char *wdays[]  = {"Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"};

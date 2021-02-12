@@ -19,7 +19,7 @@
 enum ResourceType { RESOURCE_NONE, RESOURCE_FILE, RESOURCE_DIR };
 enum DepthType { DEPTH_NONE, DEPTH_CHILD, DEPTH_ALL };
 
-using namespace sdfat;
+//using namespace sdfat;
 
 class ESPWebDAV	{
 public:
@@ -41,10 +41,10 @@ protected:
 	void handleUnlock(ResourceType resource);
 	void handlePropPatch(ResourceType resource);
 	void handleProp(ResourceType resource);
-	void sendPropResponse(boolean recursing, FatFile *curFile);
+	void sendPropResponse(boolean recursing, sdfat::FatFile *curFile);
 	void handleGet(ResourceType resource, bool isGet);
 	void handlePut(ResourceType resource);
-	void handleWriteError(String message, FatFile *wFile);
+	void handleWriteError(String message, sdfat::FatFile *wFile);
 	void handleDirectoryCreate(ResourceType resource);
 	void handleMove(ResourceType resource);
 	void handleDelete(ResourceType resource);
@@ -66,7 +66,7 @@ protected:
 	
 	// variables pertaining to current most HTTP request being serviced
 	WiFiServer *server;
-	SdFat sd;
+	sdfat::SdFat sd;
 
 	WiFiClient 	client;
 	String 		method;

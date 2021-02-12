@@ -48,8 +48,6 @@
 //#define FTP_BUF_SIZE 8*1460
 #define FTP_BUF_SIZE 2*1460
 
-using namespace sdfat;
-
 class FtpServer
 {
 public:
@@ -82,8 +80,8 @@ private:
   WiFiClient client;
   WiFiClient data;
   
-  FatFile file;
-  SdFat SD;
+  sdfat::FatFile file;
+  sdfat::SdFat SD;
   int chipSelectPin;
   SPISettings spiSettings;
   

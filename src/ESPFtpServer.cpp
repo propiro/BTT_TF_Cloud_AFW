@@ -26,6 +26,8 @@
 #include <ESP8266WiFi.h>
 #include <WiFiClient.h>
 
+using namespace sdfat;
+
 WiFiServer ftpServer(FTP_CTRL_PORT);
 WiFiServer dataServer(FTP_DATA_PORT_PASV);
 

@@ -20,6 +20,7 @@
 #include <ESP8266WiFi.h>
 #include "ESPWebDAV.h"
 #include "ESPFtpServer.h"
+#include "WebOTA.h"
 #include "WiFiSettings.h"
 
 #define HOSTNAME	"BTT_TF_CLOUD_AFW"
@@ -40,24 +41,26 @@ void setup() {
 	Serial.println("");
 	Serial.println("Connecting to WiFi");
 
-	WiFi.mode(WIFI_STA);
-	WiFi.setPhyMode(WIFI_PHY_MODE_11N);
-	WiFi.hostname(HOSTNAME);
-	delay(1000);
+	// WiFi.mode(WIFI_STA);
+	// WiFi.setPhyMode(WIFI_PHY_MODE_11N);
+	// WiFi.hostname(HOSTNAME);
+	// delay(1000);
 
-	WiFi.begin(WIFI_SSID, WIFI_PASSWORD);
+	// WiFi.begin(WIFI_SSID, WIFI_PASSWORD);
 
-	// Wait for connection
-	while(WiFi.status() != WL_CONNECTED) {
-		delay(500);
-		Serial.print(".");
-	}
+	// // Wait for connection
+	// while(WiFi.status() != WL_CONNECTED) {
+	// 	delay(500);
+	// 	Serial.print(".");
+	// }
 
-	Serial.println("");
-	Serial.print("Connected to "); Serial.println(WIFI_SSID);
-	Serial.print ("IP address: "); Serial.println(WiFi.localIP());
-	Serial.print ("RSSI: "); Serial.println(WiFi.RSSI());
-	Serial.print ("Mode: "); Serial.println(WiFi.getPhyMode());
+	// Serial.println("");
+	// Serial.print("Connected to "); Serial.println(WIFI_SSID);
+	// Serial.print ("IP address: "); Serial.println(WiFi.localIP());
+	// Serial.print ("RSSI: "); Serial.println(WiFi.RSSI());
+	// Serial.print ("Mode: "); Serial.println(WiFi.getPhyMode());
+
+	init_wifi(WIFI_SSID, WIFI_PASSWORD, HOSTNAME);
 	
 	// start the SD DAV server
 	if(!dav.init(SERVER_PORT))		{
@@ -75,6 +78,7 @@ void setup() {
 // ------------------------
 void loop() {
 // ------------------------
+	// WebDAY
 	if(dav.isClientWaiting())	{
 		Serial.println("Client connected");
 		if(initFailed)
@@ -86,5 +90,9 @@ void loop() {
 		dav.handleClient();
 	}
 
+	// FTP
 	ftpSrv.handleFTP();        //make sure in loop you call handleFTP()!!  
+
+	// Web OTA update
+	webota.handle();
 }
