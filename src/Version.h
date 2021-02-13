@@ -21,6 +21,6 @@
 #define VERSION_H
 
 #define AFW_FULL_NAME "BTT TF Cloud AFW"
-#define AFW_VERSION "0.1-dev"
+#define AFW_VERSION "0.1"
 
 #endif //VERSION_H
