@@ -54,7 +54,10 @@ Connecting........_____.....___
 ```
 
 * First, press and hold the BOOT push button and second press the RST push button
+
 ![Buttons](pics/BTT_TF_Cloud_Buttons.jpg)
+
+
 * Release both buttons at the same time
 * The flash process should run now
 
