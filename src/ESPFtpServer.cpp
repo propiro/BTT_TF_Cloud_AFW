@@ -243,18 +243,36 @@ boolean FtpServer::processCommand()
   //
   else if (!strcmp(command, "CWD"))
   {
+    char path[FTP_CWD_SIZE];
+
     if (strcmp(parameters, ".") == 0) // 'CWD .' is the same as PWD command
+    { 
       client.println("257 \"" + String(cwdName) + "\" is your current directory");
-    else if (parameters[0] == '/') // Estimate full path
-    {
-      strcpy(cwdName, parameters);
-      client.println("250 Ok. Current directory is " + String(cwdName));
     }
-    else
+    else 
     {
-      strcat(cwdName, "/");
-      strcat(cwdName, parameters);
-      client.println("250 Ok. Current directory is " + String(cwdName));
+      if (parameters[0] == '/') // Estimate full path
+      {
+        strcpy(path, parameters);
+      }
+      else
+      {
+        strcpy(path, cwdName);
+        strcat(path, "/");
+        strcat(path, parameters);
+      }
+
+      if(SD.exists(path))
+      {
+        // Update current working directory
+        strcpy(cwdName, path);
+
+        client.println("250 Ok. Current directory is " + String(cwdName));
+      }
+      else
+      {
+        client.println("550 Can't open directory " + String(cwdName));
+      }
     }
   }
   //
