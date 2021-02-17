@@ -19,6 +19,8 @@ The latest release can be found here: https://github.com/AlbrechtL/BTT_TF_Cloud_
 ## Installing
 **`esptool.py`** is needed for the flashing AFW initially. Please visit https://github.com/espressif/esptool for details.
 
+A backup of the original firmware is always recommended. Read the section "Backup of original firmware", please.
+
 ### Over-the-Air (OTA)
 This options is only available if you already have an installed AFW.
 
@@ -52,7 +54,10 @@ Connecting........_____.....___
 ```
 
 * First, press and hold the BOOT push button and second press the RST push button
+
 ![Buttons](pics/BTT_TF_Cloud_Buttons.jpg)
+
+
 * Release both buttons at the same time
 * The flash process should run now
 
@@ -219,6 +224,26 @@ Connecting........_____..
 9. Reset the device again with the RST switch.
 
 ## Technical Stuff
+### Backup of original firmware
+* Backup the original firmware by using the command `esptool.py -p <your serial port> read_flash 0x0000 0x400000 BTT_Original_Firmware.bin`
+
+```
+# esptool.py -p /dev/ttyUSB0 read_flash 0x00000 0x400000 BTT_Original_Firmware.bin
+```
+* Wait until `esptool.py` reports `Connecting..`
+
+```
+esptool.py v3.0
+Serial port /dev/ttyUSB0
+Connecting........_____.....___
+```
+
+* First, press and hold the BOOT push button and second press the RST push button
+* Release both buttons at the same time
+* The reading process should run now
+
+*HINT: Your can find the original firmware also inside the folder "original_firmware" in this repo.*
+
 ### Pinout
 
 BTT TF Cloud hardware uses the following SD card connections:
