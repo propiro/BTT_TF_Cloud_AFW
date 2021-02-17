@@ -7,7 +7,7 @@ More information about these devices can be found at the official repro https://
 
 ## Features
 
-* FTP server (tested with FileZilla)
+* FTP server (tested with FileZilla; for the FileZilla settings read the section FTP, please)
 * WebDAV server
 * WiFi config mode via an access point
 * SD card is in use only when a connection (WebDAV or FTP) is established
@@ -179,6 +179,17 @@ The FTP server is tested with [FileZilla](https://filezilla-project.org/). If yo
 * Only supports passive FTP mode
 * No encryption
 * Accepts only 1 connection at the same time
+
+**FileZilla Settings**
+
+Please apply the following settings to FileZilla.
+
+* Set maximum simultaneous transfers to 1
+![Transfer Settings](pics/FileZilla_Transfer_Settings.png)
+
+* Disable treat files without extensions as ASCII file. This options is enabled by default and can results in broken binary files.
+![FileZilla File Type Settings](pics/FileZilla_FileType_Settings.png)
+
 
 ## Building
 PlatformIO (https://platformio.org/) is required and it should install the dependencies automatically.
