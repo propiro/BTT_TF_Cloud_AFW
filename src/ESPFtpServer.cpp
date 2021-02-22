@@ -652,6 +652,7 @@ boolean FtpServer::processCommand()
       //file = SPIFFS.open(path, "w");
       //try.. file = SD.open(path, "w");
       file.open(path, FILE_WRITE);
+      //file.open(path, O_CREAT | O_WRITE);
       if (!file.isOpen())
         client.println("451 Can't open/create " + String(parameters));
       else if (!dataConnect())
@@ -668,6 +669,27 @@ boolean FtpServer::processCommand()
         millisBeginTrans = millis();
         bytesTransfered = 0;
         transferStatus = 2;
+
+        // // high speed raw write implementation
+        // // close any previous file
+        // file.close();
+        // // delete old file
+        // SD.remove(path);
+      
+        // // create a contiguous file
+        // const size_t WRITE_BLOCK_CONST = 512;
+        // size_t contBlocks = (contentLen/WRITE_BLOCK_CONST + 1);
+        // uint32_t bgnBlock, endBlock;
+
+        // if (!file.createContiguous(path, contBlocks * WRITE_BLOCK_CONST))
+        //   client.println("550 Can't create File \"create contiguous sections failed\"");
+
+        // // get the location of the file's blocks
+        // if (!file.contiguousRange(&bgnBlock, &endBlock))
+        //   client.println("550 Can't create File \"Unable to get contiguous range\"");
+
+        // if (!SD.card()->writeStart(bgnBlock, contBlocks))
+        //   client.println("550 Can't create File \"Unable to start writing contiguous range\"");
       }
     }
   }
