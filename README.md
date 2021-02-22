@@ -271,7 +271,9 @@ Here is another sample schematic which is similar to the BTT TF Cloud devices.
 ![Example Schematic](pics/PrinterHookup2.jpg)
 
 ### Remove of LM1117 
-To connect the ESP8266 to USB and let the device connected via SD it is necessary to remove the LM1117 voltage regulator.
+To connect the ESP8266 to USB and let the device connected via SD it is necessary to remove the LM1117 voltage regulator. In all other cases it is not necessary to remove it!
+
+NOTE: It seems that the ESP8266 is not booting with removed LM1117 and **unconnected** USB +5V power.
 
 ![BTT_TF_Cloud_Removed_LM1117](pics/BTT_TF_Cloud_Removed_LM1117.jpg)
 
