@@ -13,6 +13,7 @@ More information about these devices can be found at the official repro https://
 * SD card is in use only when a connection (WebDAV or FTP) is established
 * Over-the-Air (OTA) firmware update via a web interface
 * FAT16 and FAT32 support
+* Supports up to 32 GB microSD/TF cards
 
 ## Download
 The latest release can be found here: https://github.com/AlbrechtL/BTT_TF_Cloud_AFW/releases
