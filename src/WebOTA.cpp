@@ -77,6 +77,8 @@ long WebOTA::max_sketch_size() {
 }
 
 // R Macro string literal https://en.cppreference.com/w/cpp/language/string_literal
+const char afw_version_html[] PROGMEM = "<title>AFW Info Page</title><h1>" AFW_FULL_NAME " Info Page</h1> <br> Firmware version: " AFW_VERSION;
+
 const char ota_version_html[] PROGMEM = "<h1>" AFW_FULL_NAME " Version " AFW_VERSION " Firmware Update</h1>";
 
 const char ota_upload_form[] PROGMEM = R"!^!(
@@ -145,7 +147,24 @@ int WebOTA::add_http_routes(WebServer *server, const char *path) {
 #endif
 	// Index page
 	server->on("/", HTTP_GET, [server]() {
-		server->send(200, "text/html", "<h1>WebOTA</h1>");
+		String html = "";
+		IPAddress ip = WiFi.localIP();
+		String localIP = String(ip[0]) + "." +  String(ip[1]) + "." + String(ip[2]) + "." + String(ip[3]);
+		html += FPSTR(afw_version_html);
+		html += "<br><a href=\"https://github.com/AlbrechtL/BTT_TF_Cloud_AFW/\">https://github.com/AlbrechtL/BTT_TF_Cloud_AFW/</a>";
+		html += "<br><br>";
+		html += "<b>Supported Services</b>";
+		html += "<ul>";
+		html += "<li>WebDAV at port 8080<br>http://" + localIP + ":8080</li><br>";
+		html += "<li>FTP at port 21 (FileZilla is supported)<br>ftp://" + localIP + "</li><br>";
+		html += "<li>Firmware update<br><a href=\"http://" + localIP + "/webota\">http://" + localIP + "/webota</a></li><br>";
+		html += "</ul>";
+		html += "<br>";
+		html += "<br>";
+		html += "HINT: The BTT TF Cloud V1.0 device supports up to 32 GB microSD/TF cards.";
+		html += "<br>";
+		html += "<br>";
+		server->send(200, "text/html", html.c_str());
 	});
 
 	// Upload firmware page

@@ -12,6 +12,7 @@ More information about these devices can be found at the official repro https://
 * WiFi config mode via an access point
 * SD card is in use only when a connection (WebDAV or FTP) is established
 * Over-the-Air (OTA) firmware update via a web interface
+* Info page
 
 ## Download
 The latest release can be found here: https://github.com/AlbrechtL/BTT_TF_Cloud_AFW/releases
@@ -26,7 +27,7 @@ This options is only available if you already have an installed AFW.
 
 * Download the latest release
 * Open a web browser
-* Browse to `http://<your IP>:8080/webota`
+* Browse to `http://<your IP>/webota`
 * Select the AFW firmware e.g. `BTT-SD-TF-Cloud_AFW_0.1.bin`
 * Click update
 
@@ -119,7 +120,7 @@ Connected to 'XXXXXXXXX'
 IP address   : 10.1.40.249
 MAC address  : XX:XX:XX:XX:XX:XX 
 mDNS started : BTT_TF_CLOUD_AFW.local
-WebOTA url   : http://BTT_TF_CLOUD_AFW.local:8080/webota
+WebOTA url   : http://BTT_TF_CLOUD_AFW.local:80/webota
 
 
 --------------------------------
@@ -175,8 +176,12 @@ Supports the basic WebDav operations - *PROPFIND*, *GET*, *PUT*, *DELETE*, *MKCO
 
 Once the WebDAV server is running on the ESP8266, a WebDAV client like Windows can access the filesystem on the SD card just like a cloud drive. The drive can also be mounted like a networked drive, and allows copying/pasting/deleting files on SD card remotely.
 
+Runs at port 8080
+
 ### FTP Server
 The FTP server is tested with [FileZilla](https://filezilla-project.org/). If you would like to use another FTP client read the limiations, please.
+
+Runs at port 21
 
 **Limitations**
 

@@ -29,8 +29,11 @@
 // SD card
 #define SD_CS 5
 
+// Webserver Infopage, Firmwareupdate
+#define WEB_SERVER_PORT 80
+
 // WebDAV server
-#define SERVER_PORT 80
+#define WEBDAV_SERVER_PORT 8080
 ESPWebDAV dav;
 String statusMessage;
 bool initFailed = false;
@@ -87,14 +90,14 @@ void setup()
 	Serial.println("Start firmware update server");
 	Serial.println("--------------------------------");
 	webota.init_wifi(HOSTNAME);
-	webota.init(8080, "/webota");
+	webota.init(WEB_SERVER_PORT, "/webota");
 
-	// start the SD DAV server
+	// Start the WebDAV server
 	Serial.println("");
 	Serial.println("--------------------------------");
 	Serial.println("Start WebDAV server");
 	Serial.println("--------------------------------");
-	if (!dav.init(SERVER_PORT))
+	if (!dav.init(WEBDAV_SERVER_PORT))
 	{
 		statusMessage = "An error occured while initialization of WebDAV server";
 		Serial.print("ERROR: ");
