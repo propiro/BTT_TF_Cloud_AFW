@@ -13,6 +13,8 @@ More information about these devices can be found at the official repro https://
 * SD card is in use only when a connection (WebDAV or FTP) is established
 * Over-the-Air (OTA) firmware update via a web interface
 * Info page
+* FAT16 and FAT32 support
+* Supports up to 32 GB microSD/TF cards
 
 ## Download
 The latest release can be found here: https://github.com/AlbrechtL/BTT_TF_Cloud_AFW/releases
@@ -176,7 +178,9 @@ Supports the basic WebDav operations - *PROPFIND*, *GET*, *PUT*, *DELETE*, *MKCO
 
 Once the WebDAV server is running on the ESP8266, a WebDAV client like Windows can access the filesystem on the SD card just like a cloud drive. The drive can also be mounted like a networked drive, and allows copying/pasting/deleting files on SD card remotely.
 
+To access the drive from Windows use the Map Network Drive menu in Windows Explorer with the address ``http://<BTT_IP>:8080``.
 Runs at port 8080
+
 
 ### FTP Server
 The FTP server is tested with [FileZilla](https://filezilla-project.org/). If you would like to use another FTP client read the limiations, please.
@@ -271,13 +275,10 @@ It looks like that the BTT TF Cloud is using a schematic like this one: https://
 Here is another sample schematic which is similar to the BTT TF Cloud devices. 
 ![Example Schematic](pics/PrinterHookup2.jpg)
 
-The card should be formatted for Fat16 or Fat32
-
-To access the drive from Windows, type ```\\esp_hostname_or_ip\DavWWWRoot``` at the Run prompt, or use Map Network Drive menu in Windows Explorer.
-
-
 ### Remove of LM1117 
-To connect the ESP8266 to USB and let the device connected via SD it is necessary to remove the LM1117 voltage regulator.
+To connect the ESP8266 to USB and let the device connected via SD it is necessary to remove the LM1117 voltage regulator. In all other cases it is not necessary to remove it!
+
+NOTE: It seems that the ESP8266 is not booting with removed LM1117 and **unconnected** USB +5V power.
 
 ![BTT_TF_Cloud_Removed_LM1117](pics/BTT_TF_Cloud_Removed_LM1117.jpg)
 
