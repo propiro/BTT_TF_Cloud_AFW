@@ -34,7 +34,15 @@ This options is only available if you already have an installed AFW.
 * Click update
 
 ### Windows
-TBD
+
+* Download the latest release and save it on your hard drive.
+* Download last relase of Tasmotizer from `https://github.com/tasmota/tasmotizer/releases/`
+* Run Tasmotizer with admin priviliges.
+* Select "BIN file"checkbox and open the AFW firmware you've just downloaded e.g. `BTT-SD-TF-Cloud_AFW_0.1.bin`
+* Connect your BIGTREETECH SD-TF card using usb cable, while pressing BOOT button on it.
+* Select COM port you have your device connected through USB Cable, by default its COM1, but after clicking REFRESH, it should detect COM port automatically (`https://i.imgur.com/h7E2k0R.jpg`).
+* Click "Tasmotize!", wait for process to finish. 
+* todo - add picture of tasmotizer to local repo instead of external link.
 
 ### Linux
 * Download the latest release
